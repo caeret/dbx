@@ -12,7 +12,7 @@ import (
 	"strings"
 	"testing"
 
-	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/caeret/mysql"
 	"github.com/stretchr/testify/assert"
 )
 

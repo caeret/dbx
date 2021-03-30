@@ -1,9 +1,8 @@
-module github.com/go-ozzo/ozzo-dbx
+module github.com/caeret/dbx
 
 go 1.13
 
 require (
-	github.com/go-sql-driver/mysql v1.4.1
+	github.com/caeret/mysql v0.0.0-20200520020758-03bb73f5292f
 	github.com/stretchr/testify v1.4.0
-	google.golang.org/appengine v1.6.5 // indirect
 )

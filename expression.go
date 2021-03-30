@@ -203,7 +203,7 @@ func (e HashExp) Build(db *DB, params Params) string {
 		default:
 			pn := fmt.Sprintf("p%v", len(params))
 			name = db.QuoteColumnName(name)
-			parts = append(parts, name+"={:"+pn+"}")
+			parts = append(parts, name+" = {:"+pn+"}")
 			params[pn] = value
 		}
 	}

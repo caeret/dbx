@@ -3,7 +3,7 @@ package dbx_test
 import (
 	"fmt"
 
-	"github.com/go-ozzo/ozzo-dbx"
+	"github.com/caeret/dbx"
 )
 
 // This example shows how to populate DB data in different ways.

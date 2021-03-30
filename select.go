@@ -33,6 +33,7 @@ type SelectQuery struct {
 	union        []UnionInfo
 	limit        int64
 	offset       int64
+	suffix       string
 	params       Params
 }
 
@@ -227,6 +228,13 @@ func (s *SelectQuery) Offset(offset int64) *SelectQuery {
 	return s
 }
 
+// Suffix specifies the suffix clause.
+// An empty suffix means no suffix.
+func (s *SelectQuery) Suffix(suffix string) *SelectQuery {
+	s.suffix = suffix
+	return s
+}
+
 // Bind specifies the parameter values to be bound to the query.
 func (s *SelectQuery) Bind(params Params) *SelectQuery {
 	s.params = params
@@ -275,6 +283,9 @@ func (s *SelectQuery) Build() *Query {
 	sql = qb.BuildOrderByAndLimit(sql, s.orderBy, s.limit, s.offset)
 	if union := qb.BuildUnion(s.union, params); union != "" {
 		sql = fmt.Sprintf("(%v) %v", sql, union)
+	}
+	if s.suffix != "" {
+		sql += " " + s.suffix
 	}
 
 	return s.builder.NewQuery(sql).Bind(params)
