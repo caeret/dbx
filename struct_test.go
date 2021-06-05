@@ -43,25 +43,17 @@ func Test_concat(t *testing.T) {
 }
 
 func Test_parseTag(t *testing.T) {
-	name, pk, plain := parseTag("abc")
+	name, pk := parseTag("abc")
 	assert.Equal(t, "abc", name)
 	assert.False(t, pk)
-	assert.False(t, plain)
 
-	name, pk, plain = parseTag("pk,abc")
+	name, pk = parseTag("pk,abc")
 	assert.Equal(t, "abc", name)
 	assert.True(t, pk)
-	assert.False(t, plain)
 
-	name, pk, plain = parseTag("pk")
+	name, pk = parseTag("pk")
 	assert.Equal(t, "", name)
 	assert.True(t, pk)
-	assert.False(t, plain)
-
-	name, pk, plain = parseTag("foo,pk,_")
-	assert.Equal(t, "foo", name)
-	assert.True(t, pk)
-	assert.True(t, plain)
 }
 
 func Test_indirect(t *testing.T) {

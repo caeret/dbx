@@ -169,7 +169,7 @@ func (si *structInfo) build(a reflect.Type, path []int, namePrefix, dbNamePrefix
 		}
 
 		name := field.Name
-		dbName, isPK, isPlain := parseTag(tag)
+		dbName, isPK := parseTag(tag)
 		if dbName == "" && !field.Anonymous {
 			if mapper != nil {
 				dbName = mapper(field.Name)
@@ -181,7 +181,7 @@ func (si *structInfo) build(a reflect.Type, path []int, namePrefix, dbNamePrefix
 			name = ""
 		}
 
-		if isNestedStruct(ft) && !isPlain {
+		if isNestedStruct(ft) {
 			// dive into non-scanner struct
 			si.build(ft, path2, concat(namePrefix, name), concat(dbNamePrefix, dbName), mapper)
 		} else if dbName != "" {
@@ -217,29 +217,14 @@ func isNestedStruct(t reflect.Type) bool {
 	return t.Kind() == reflect.Struct && !reflect.PtrTo(t).Implements(scannerType)
 }
 
-func parseTag(tag string) (name string, isPK bool, isPlain bool) {
+func parseTag(tag string) (string, bool) {
 	if tag == "pk" {
-		return "", true, false
+		return "", true
 	}
-
-	m := make(map[string]struct{})
-	for _, v := range strings.Split(tag, ",") {
-		m[v] = struct{}{}
+	if strings.HasPrefix(tag, "pk,") {
+		return tag[3:], true
 	}
-
-	_, isPK = m["pk"]
-	delete(m, "pk")
-
-	_, isPlain = m["_"]
-	delete(m, "_")
-
-	if len(m) > 0 {
-		for k := range m {
-			name = k
-		}
-	}
-
-	return
+	return tag, false
 }
 
 func concat(s1, s2 string) string {
